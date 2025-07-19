@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-u-w$t_nf+8p__c+v7mo9h8@hzekzyzjj(s@czv2xup*n0!!o^)
 
 
 ALLOWED_HOSTS = ['*']
-DEBUG = False
+DEBUG = True
 
 
 # Application definition
@@ -51,7 +51,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'accounts.middleware.prevent_back_middleware.PreventBackMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'bhokey_project.urls'
@@ -121,10 +121,10 @@ USE_TZ = True
 
 
 
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
