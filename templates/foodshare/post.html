@@ -1,0 +1,304 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Post Excess Food | Bhokey</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        #map {
+            height: 300px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="logo">
+            <h1><i class="fas fa-utensils"></i> Bhokey</h1>
+            <p>Connecting excess food with those who need it</p>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'listings' %}">Browse Listings</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'post_food' %}">Post Food</a></li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}" class="btn-login">Login/Signup</a></li>
+                {% endif %}
+                <li><a href="#">About</a></li>
+            </ul>
+        </nav>
+        <div class="mobile-menu">
+            <i class="fas fa-bars"></i>
+        </div>
+    </div>
+</header>
+
+<main class="post-food-page">
+    <div class="container">
+        <div class="post-header">
+            <h1>Share Your Excess Food</h1>
+            <p>Help reduce food waste by listing what you have available</p>
+        </div>
+
+        {% if user.is_authenticated %}
+        <form id="food-post-form" class="post-form" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Food Details -->
+            <div class="form-section">
+                <h2>🍲 Food Details</h2>
+                <div class="form-group">
+                    <label for="food-name">Food Name/Description*</label>
+                    <input type="text" id="food-name" name="name" required placeholder="e.g., Fresh veggie platter..." />
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="food-category">Category*</label>
+                        <select id="food-category" name="category" required>
+                            <option value="">Select category</option>
+                            <option value="fruits">Fruits & Vegetables</option>
+                            <option value="grains">Grains & Bread</option>
+                            <option value="dairy">Dairy & Eggs</option>
+                            <option value="meat">Meat & Poultry</option>
+                            <option value="prepared">Prepared Meals</option>
+                            <option value="packaged">Packaged Goods</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="food-quantity">Quantity*</label>
+                        <input type="text" id="food-quantity" name="quantity" required placeholder="e.g., 5 lbs, 3 packs..." />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="food-description">Additional Details</label>
+                    <textarea id="food-description" name="description" rows="4" placeholder="Ingredients, packaging, prep tips..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Dietary Info</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="dietary" value="vegetarian" /> Vegetarian</label>
+                        <label><input type="checkbox" name="dietary" value="vegan" /> Vegan</label>
+                        <label><input type="checkbox" name="dietary" value="gluten-free" /> Gluten-Free</label>
+                        <label><input type="checkbox" name="dietary" value="halal" /> Halal</label>
+                        <label><input type="checkbox" name="dietary" value="kosher" /> Kosher</label>
+                        <label><input type="checkbox" name="dietary" value="nut-free" /> Nut-Free</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Image Upload -->
+            <div class="form-section">
+                <h2>📸 Upload Images</h2>
+                <div class="image-upload">
+                    <div class="upload-preview">
+                        <div class="preview-item empty">
+                            <i class="fas fa-camera"></i><p>Add photo</p>
+                        </div>
+                    </div>
+                    <input type="file" id="food-images" name="image1" accept="image/*" style="display: none" />
+                    <button type="button" class="btn btn-upload" onclick="document.getElementById('food-images').click()">
+                        <i class="fas fa-upload"></i> Upload Images
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pickup Info -->
+            <div class="form-section">
+                <h2>📍 Pickup Information</h2>
+                <div class="form-group">
+                    <label for="pickup-location">Pickup Location*</label>
+                    <input type="text" id="pickup-location" name="location" required placeholder="e.g., near Butwal Buspark..." />
+                </div>
+                <div class="form-group">
+                    <label for="contact-method">Preferred Contact Method*</label>
+                    <select id="contact-method" name="contact_method" required>
+                        <option value="">Select method</option>
+                        <option value="message">Messaging</option>
+                        <option value="email">Email</option>
+                        <option value="phone">Phone</option>
+                        <option value="text">Text Message</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="special-instructions">Special Instructions</label>
+                    <textarea id="special-instructions" name="special_instructions" rows="3" placeholder="e.g., Call before arriving..."></textarea>
+                </div>
+            </div>
+            <!-- Map -->
+                <p><strong>📌 Please allow location access or pin your location manually below:</strong></p>
+                <div id="map"></div>
+                <input type="hidden" name="latitude" id="latitude">
+                <input type="hidden" name="longitude" id="longitude">
+            </div>
+
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-submit">🚀 Post Listing</button>
+                <button type="reset" class="btn btn-cancel">Clear</button>
+            </div>
+        </form>
+
+      <section class="your-posts">
+    <h2>📋 Your Posts</h2>
+   {% if user_posts %}
+    <section class="your-posts">
+        <h2 style="margin: 30px 0 10px;">Your Food Listings</h2>
+        <div class="listings-grid">
+            {% for post in user_posts %}
+                <div class="listing-card">
+                    <div class="listing-image" style="background-image: url('{% if post.image1 %}{{ post.image1.url }}{% else %}{% static 'images/default-food.jpg' %}{% endif %}');">
+                        <span class="category-tag">{{ post.category|title }}</span>
+                    </div>
+                    <div class="listing-details">
+                        <h3>{{ post.name }}</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> {{ post.location }}</p>
+                        <div class="food-tags">
+                            <span>{{ post.quantity }}</span>
+                            <span>{{ post.dietary }}</span>
+                        </div>
+                        <div class="listing-actions">
+                            <a href="{% url 'edit_post' post.pk %}" class="btn btn-outline">Edit</a>
+                            <form action="{% url 'delete_post' post.pk %}" method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-delete">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% else %}
+    <p style="text-align:center; margin-top:20px;">You haven't posted any food yet.</p>
+{% endif %}
+
+</section>
+
+        {% else %}
+            <div class="login-prompt">
+                <p>You must <a href="{% url 'login' %}">log in</a> to post food or view your posts.</p>
+            </div>
+        {% endif %}
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3> Bhokey</h3>
+                <p>Connecting communities to reduce food waste and hunger.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Food Safety</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Bhokey. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+<script>
+    // Mobile menu
+    document.querySelector('.mobile-menu').addEventListener('click', function () {
+        document.querySelector('nav').classList.toggle('show');
+    });
+
+    // Food image preview
+    document.addEventListener('DOMContentLoaded', function () {
+        const foodImagesInput = document.getElementById('food-images');
+        const previewItem = document.querySelector('.preview-item.empty');
+
+        if (foodImagesInput && previewItem) {
+            foodImagesInput.addEventListener('change', function (e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        previewItem.innerHTML = `<img src="${e.target.result}" alt="Food preview">`;
+                        previewItem.classList.remove('empty');
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // Map and location logic
+        const latInput = document.getElementById('latitude');
+        const lngInput = document.getElementById('longitude');
+        let map, marker;
+
+       function initMap(lat = 27.7172, lng = 85.3240) {
+    if (map) {
+        map.remove(); // Clean up old map instance
+    }
+
+    map = L.map('map').setView([lat, lng], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    marker = L.marker([lat, lng], { draggable: true }).addTo(map);
+    latInput.value = lat;
+    lngInput.value = lng;
+
+    marker.on('dragend', function () {
+        const pos = marker.getLatLng();
+        latInput.value = pos.lat;
+        lngInput.value = pos.lng;
+    });
+
+    map.on('click', function (e) {
+        marker.setLatLng(e.latlng);
+        latInput.value = e.latlng.lat;
+        lngInput.value = e.latlng.lng;
+    });
+}
+
+      if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    initMap(position.coords.latitude, position.coords.longitude);
+                },
+                (error) => {
+                    alert("Location access denied. Please pin your location on the map manually.");
+                    initMap(); // fallback
+                },
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            );
+        } else {
+            initMap(); // fallback if no geolocation
+        }
+    });
+
+</script>
+</body>
+</html>

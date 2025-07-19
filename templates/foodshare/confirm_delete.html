@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Confirm Delete | SharePlate</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1><i class="fas fa-utensils"></i> Bhokey</h1>
+                <p>Connecting excess food with those who need it</p>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'listings' %}">Browse Listings</a></li>
+                    <li><a href="{% url 'post_food' %}">Post Food</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'logout' %}">Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}" class="btn-login">Login/Signup</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="post-food-page">
+        <div class="container">
+            <div class="post-header">
+                <h1>Confirm Deletion</h1>
+                <p>Are you sure you want to delete <strong>"{{ post.name }}"</strong>?</p>
+            </div>
+
+            <form method="POST" class="post-form">
+                {% csrf_token %}
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-delete">Yes, Delete</button>
+                    <a href="{% url 'post_food' %}" class="btn btn-cancel">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 Bhokey. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

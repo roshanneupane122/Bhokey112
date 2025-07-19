@@ -1,0 +1,166 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SharePlate - Reduce Food Waste</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1><i class="fas fa-utensils"></i> Bhokey</h1>
+                <p>Connecting excess food with those who need it</p>
+            </div>
+            <nav>
+               <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'listings' %}">Browse Listings</a></li>
+
+        {% if user.is_authenticated %}
+            <li><a href="{% url 'post_food' %}">Post Food</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        {% else %}
+            <li><a href="{% url 'login' %}" class="btn-login">Login/Signup</a></li>
+        {% endif %}
+        
+        <li><a href="#">About</a></li>
+    </ul>
+            </nav>
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Fight Food Waste in Your Community</h2>
+                <p>Share your excess food or find free meals near you</p>
+                <!-- Optional Search Bar -->
+                <!--
+                <div class="search-bar">
+                    <input type="text" placeholder="Search by food type or location..." />
+                    <select>
+                        <option value="">All Categories</option>
+                        <option value="fruits">Fruits & Vegetables</option>
+                        <option value="grains">Grains & Bread</option>
+                        <option value="dairy">Dairy & Eggs</option>
+                        <option value="meat">Meat & Poultry</option>
+                        <option value="prepared">Prepared Meals</option>
+                        <option value="packaged">Packaged Goods</option>
+                    </select>
+                    <button class="btn-search"><i class="fas fa-search"></i> Search</button>
+                </div>
+                -->
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <div class="container">
+            <h2>How  Bhokey Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-icon">1</div>
+                    <h3>Post Excess Food</h3>
+                    <p>List the food you have too much of with details and photos</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon">2</div>
+                    <h3>Find Nearby</h3>
+                    <p>People in your area see your listing and request it</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon">3</div>
+                    <h3>Share & Connect</h3>
+                    <p>Arrange pickup or delivery and reduce food waste</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="featured-listings">
+        <div class="container">
+            <h2>Recently Posted Near You</h2>
+            <div class="listings-grid">
+                {% for post in recent_posts %}
+                    <div class="listing-card">
+                        <div class="listing-image" style="background-image: url('{% if post.image1 %}{{ post.image1.url }}{% else %}{% static 'images/default-food.jpg' %}{% endif %}');">
+                            <span class="category-tag">{{ post.category|title }}</span>
+                        </div>
+                        <div class="listing-details">
+                            <h3>{{ post.name }}</h3>
+                            <p><i class="fas fa-map-marker-alt"></i> {{ post.location }}</p>
+                            <p><i class="fas fa-clock"></i> Posted just now</p>
+                            <div class="food-tags">
+                                <span>{{ post.quantity }}</span>
+                                {% if post.dietary %}
+                                    <span>{{ post.dietary }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>No recent food posts available.</p>
+                {% endfor %}
+            </div>
+            <a href="{% url 'listings' %}" class="btn-view-all">View All Listings</a>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <div class="stat-item">
+                <h3>1,245</h3>
+                <p>Meals Shared</p>
+            </div>
+            <div class="stat-item">
+                <h3>892</h3>
+                <p>Active Users</p>
+            </div>
+            <div class="stat-item">
+                <h3>3.2 Tons</h3>
+                <p>Food Waste Prevented</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3> Bhokey</h3>
+                    <p>Connecting communities to reduce food waste and hunger.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Food Safety</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Bhokey. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

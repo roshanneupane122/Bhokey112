@@ -1,0 +1,183 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pickup Directions | Bhokey</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0; padding: 0;
+      background: #f8f8f8;
+    }
+    .container {
+      max-width: 720px;
+      margin: 30px auto; padding: 0 15px;
+    }
+    .pickup-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .pickup-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+      padding: 20px; margin-bottom: 25px;
+    }
+    .pickup-card h2 { margin-top: 0; }
+    .pickup-card p { margin: 6px 0; }
+    .info-box {
+      background: #e9f7ef;
+      border-left: 4px solid #28a745;
+      padding: 10px 15px;
+      margin: 15px 0;
+      font-size: 0.95rem;
+    }
+    #map {
+      width: 100%;
+      height: 380px;
+      border-radius: 10px;
+      margin-top: 15px;
+    }
+    .action-buttons {
+      margin-top: 20px;
+      text-align: center;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+    .btn-map, .btn-confirm, .btn-chat {
+      display: inline-block;
+      padding: 10px 18px;
+      font-size: 1rem;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      min-width: 150px;
+    }
+    .btn-map:hover, .btn-confirm:hover, .btn-chat:hover {
+      background: #218838;
+    }
+    @media (max-width: 600px) {
+      #map { height: 300px; }
+      .btn-map, .btn-confirm, .btn-chat { width: 90%; font-size: 0.95rem; }
+      .action-buttons {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="pickup-header">
+    <h1>🚗 Pickup Route</h1>
+    <p>Reach your food pickup point safely and quickly</p>
+  </div>
+
+  <div class="pickup-card">
+    <h2>{{ post.name }}</h2>
+    <p><strong>Category:</strong> {{ post.category|title }}</p>
+    <p><strong>Quantity:</strong> {{ post.quantity }}</p>
+    <p><strong>Pickup Location:</strong> {{ post.location }}</p>
+    <p><strong>Contact Method:</strong> {{ post.contact_method|title }}</p>
+    {% if post.description %}
+      <p><strong>Details:</strong> {{ post.description }}</p>
+    {% endif %}
+  </div>
+
+  <div class="info-box" id="distance-info">
+    ⏳ Getting estimated time and distance...
+  </div>
+
+  <div id="map"></div>
+
+  <div class="action-buttons">
+    <!-- Open in Google Maps -->
+    <a id="google-maps-link" class="btn-map" target="_blank" rel="noopener noreferrer">Open in Google Maps</a>
+
+    <!-- Mark as Picked Up form -->
+    {% if not post.picked_up %}
+      <form method="POST" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn-confirm">✅ Mark as Picked Up</button>
+      </form>
+    {% else %}
+      <button class="btn-confirm" disabled>✅ Picked Up</button>
+    {% endif %}
+
+    <!-- Chat placeholder -->
+    <button class="btn-chat" onclick="alert('Chat feature coming soon!')">💬 Message Poster</button>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"></script>
+
+<script>
+  const pickupLat = {{ post.latitude|default:0 }};
+  const pickupLng = {{ post.longitude|default:0 }};
+  const map = L.map('map');
+  const distanceInfo = document.getElementById('distance-info');
+  const gmapsLink = document.getElementById('google-maps-link');
+
+  function formatDistance(meters) {
+    return meters > 1000 ? (meters / 1000).toFixed(2) + " km" : meters.toFixed(0) + " m";
+  }
+  function formatTime(seconds) {
+    const minutes = Math.round(seconds / 60);
+    return minutes + " min";
+  }
+
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const userLat = position.coords.latitude;
+        const userLng = position.coords.longitude;
+
+        map.setView([userLat, userLng], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        const control = L.Routing.control({
+          waypoints: [
+            L.latLng(userLat, userLng),
+            L.latLng(pickupLat, pickupLng)
+          ],
+          routeWhileDragging: false,
+          draggableWaypoints: false,
+          addWaypoints: false
+        }).addTo(map);
+
+        control.on('routesfound', function(e) {
+          const route = e.routes[0];
+          const distance = route.summary.totalDistance;
+          const duration = route.summary.totalTime;
+          distanceInfo.innerHTML = `🧭 <strong>Distance:</strong> ${formatDistance(distance)} &nbsp; ⏱️ <strong>ETA:</strong> ${formatTime(duration)}`;
+        });
+
+        gmapsLink.href = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${pickupLat},${pickupLng}&travelmode=driving`;
+      },
+      () => {
+        distanceInfo.innerHTML = "❌ Unable to get your location. Please enable location access.";
+      }
+    );
+  } else {
+    distanceInfo.innerHTML = "❌ Geolocation not supported in your browser.";
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,843 @@
+/* Global Styles */
+:root {
+    --primary-color: #4CAF50;
+    --secondary-color: #388E3C;
+    --accent-color: #8BC34A;
+    --dark-color: #2E7D32;
+    --light-color: #C8E6C9;
+    --text-color: #333;
+    --light-text: #f8f8f8;
+    --gray-light: #f5f5f5;
+    --gray-medium: #e0e0e0;
+    --gray-dark: #757575;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-color);
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+.btn-login {
+    background: var(--dark-color);
+    margin-left: 15px;
+}
+
+.btn-view-all {
+    display: block;
+    width: fit-content;
+    margin: 30px auto 0;
+    padding: 12px 25px;
+    font-size: 1.1rem;
+}
+
+/* Header Styles */
+header {
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+}
+
+.logo h1 {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo p {
+    font-size: 0.8rem;
+    color: var(--gray-dark);
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin-left: 20px;
+}
+
+nav ul li a {
+    color: var(--text-color);
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+nav ul li a:hover {
+    color: var(--primary-color);
+}
+
+nav ul li a.active {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.mobile-menu {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('../images/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 150px 0 100px;
+    text-align: center;
+    margin-top: 70px;
+}
+
+.hero h2 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+.search-bar {
+    display: flex;
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 50px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 15px 20px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+}
+
+.search-bar select {
+    padding: 0 15px;
+    border: none;
+    border-left: 1px solid var(--gray-medium);
+    outline: none;
+    appearance: none;
+    background: white url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") no-repeat right 10px center;
+    background-size: 15px;
+    cursor: pointer;
+}
+
+.btn-search {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0 25px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-search:hover {
+    background: var(--secondary-color);
+}
+
+/* How It Works Section */
+.how-it-works {
+    padding: 80px 0;
+    background: var(--gray-light);
+    text-align: center;
+}
+
+.how-it-works h2 {
+    font-size: 2rem;
+    margin-bottom: 50px;
+    color: var(--dark-color);
+}
+
+.steps {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.step {
+    flex: 1;
+    background: white;
+    padding: 30px 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s;
+}
+
+.step:hover {
+    transform: translateY(-10px);
+}
+
+.step-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0 auto 20px;
+}
+
+.step h3 {
+    margin-bottom: 15px;
+    color: var(--dark-color);
+}
+
+/* Featured Listings */
+.featured-listings {
+    padding: 80px 0;
+}
+
+.featured-listings h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 50px;
+    color: var(--dark-color);
+}
+
+.listings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.listing-card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.listing-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+.listing-image {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.category-tag {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: white;
+}
+
+.category-tag.vegetarian {
+    background: var(--accent-color);
+}
+
+.category-tag.vegan {
+    background: #4CAF50;
+}
+
+.category-tag.meat {
+    background: #F44336;
+}
+
+.listing-details {
+    padding: 20px;
+}
+
+.listing-details h3 {
+    margin-bottom: 10px;
+    color: var(--dark-color);
+}
+
+.listing-details p {
+    margin-bottom: 8px;
+    color: var(--gray-dark);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.food-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.food-tags span {
+    background: var(--light-color);
+    color: var(--dark-color);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+/* Stats Section */
+.stats {
+    background: var(--primary-color);
+    color: white;
+    padding: 60px 0;
+    text-align: center;
+}
+
+.stats .container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.stat-item h3 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+/* Footer */
+footer {
+    background: #333;
+    color: white;
+    padding: 60px 0 0;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 250px;
+}
+
+.footer-section h3 {
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+}
+
+.footer-section ul {
+    list-style: none;
+}
+
+.footer-section ul li {
+    margin-bottom: 10px;
+}
+
+.footer-section ul li a {
+    color: #ccc;
+    transition: color 0.3s;
+}
+
+.footer-section ul li a:hover {
+    color: white;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.social-icons a {
+    color: white;
+    font-size: 1.2rem;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: var(--accent-color);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding: 20px 0;
+    border-top: 1px solid #444;
+    color: #aaa;
+    font-size: 0.9rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+    .steps {
+        flex-direction: column;
+    }
+    
+    .step {
+        margin-bottom: 20px;
+    }
+    
+    .search-bar {
+        flex-direction: column;
+        border-radius: 8px;
+    }
+    
+    .search-bar input,
+    .search-bar select,
+    .btn-search {
+        width: 100%;
+        border-radius: 0;
+        border-left: none;
+        border-bottom: 1px solid var(--gray-medium);
+    }
+    
+    .btn-search {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    nav {
+        display: none;
+    }
+    
+    .mobile-menu {
+        display: block;
+    }
+    
+    .hero h2 {
+        font-size: 2rem;
+    }
+    
+    .hero p {
+        font-size: 1rem;
+    }
+    
+    .stats .container {
+        flex-direction: column;
+        gap: 30px;
+    }
+}
+
+@media (max-width: 576px) {
+    .logo h1 {
+        font-size: 1.5rem;
+    }
+    
+    .hero {
+        padding: 120px 0 80px;
+    }
+    
+    .featured-listings,
+    .how-it-works {
+        padding: 60px 0;
+    }
+}
+
+/* Listings Page Specific Styles */
+.listings-page {
+    padding: 100px 0 60px;
+}
+
+.page-header {
+    margin-bottom: 40px;
+}
+
+.page-header h1 {
+    font-size: 2.2rem;
+    color: var(--dark-color);
+    margin-bottom: 20px;
+}
+
+/* Updated Filter Controls Styles */
+.filter-controls {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+
+    display: flex;
+    flex-wrap: nowrap;     /* No wrapping, keep in one line */
+    gap: 20px;
+    align-items: flex-end; /* Align labels and selects at bottom */
+    overflow-x: auto;      /* Scroll horizontally if too small */
+}
+
+.filter-group {
+    flex: 1 1 220px;  /* flexible grow/shrink, minimum 220px width */
+    min-width: 200px; /* minimum width to keep consistent */
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-group label {
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--dark-color);
+}
+
+.filter-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--gray-medium);
+    border-radius: 4px;
+    background: white;
+}
+
+/* Apply button */
+.btn-apply {
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+/* Listing Actions */
+.listing-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn-outline {
+    background: white;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 40px;
+}
+
+.page-numbers {
+    display: flex;
+    gap: 10px;
+}
+
+.page-numbers span {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.page-numbers span.active {
+    background: var(--primary-color);
+    color: white;
+    border-radius: 4px;
+}
+
+.btn-prev, .btn-next {
+    background: none;
+    border: 1px solid var(--gray-medium);
+    padding: 5px 15px;
+    cursor: pointer;
+}
+
+/* Post Food Page Styles */
+.post-food-page {
+    padding: 100px 0 60px;
+}
+
+.post-header {
+    margin-bottom: 40px;
+}
+
+.post-header h1 {
+    font-size: 2.2rem;
+    color: var(--dark-color);
+    margin-bottom: 10px;
+}
+
+.post-form {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.form-section {
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid var(--gray-light);
+}
+
+.form-section h2 {
+    font-size: 1.5rem;
+    color: var(--dark-color);
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--gray-medium);
+    border-radius: 4px;
+    font-family: inherit;
+}
+
+.form-group textarea {
+    min-height: 100px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.image-upload {
+    margin-top: 20px;
+}
+
+.upload-preview {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.preview-item {
+    width: 120px;
+    height: 120px;
+    border: 2px dashed var(--gray-medium);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-dark);
+    overflow: hidden;
+}
+
+.preview-item.empty {
+    cursor: pointer;
+}
+
+.preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.btn-upload {
+    background: var(--gray-light);
+    color: var(--text-color);
+}
+
+.btn-upload:hover {
+    background: var(--gray-medium);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+.btn-submit {
+    background: var(--dark-color);
+    padding: 12px 30px;
+    font-size: 1.1rem;
+}
+
+.btn-cancel {
+    background: var(--gray-light);
+    color: var(--text-color);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .upload-preview {
+        flex-wrap: wrap;
+    }
+    
+    .preview-item {
+        width: 100px;
+        height: 100px;
+    }
+
+    /* For filters on smaller screens - allow wrapping */
+    .filter-controls {
+        flex-wrap: wrap;
+        overflow-x: visible;
+    }
+}
+/* Filter Controls Container */
+.filter-controls {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+
+    display: flex;
+    gap: 20px;
+    align-items: flex-end;
+    flex-wrap: nowrap; /* Keep items in one line */
+   
+}
+
+/* Each filter group inside the form */
+.filter-group {
+  display: flex;
+    flex-direction: column;
+    flex: 1;               /* equal width for all filters */
+    min-width: 180px; 
+}
+
+.filter-group label {
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--dark-color, #2e7d32); /* fallback */
+}
+
+.filter-group select {
+    padding: 10px;
+    border: 1px solid var(--gray-medium, #e0e0e0);
+    border-radius: 4px;
+    font-size: 1rem;
+    background: white;
+    cursor: pointer;
+}
+
+/* Apply Filters button */
+.btn-apply {
+    background-color: var(--primary-color, #a0a0a0);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0; /* Prevent shrinking */
+    align-self: flex-end;
+    transition: background-color 0.3s ease;
+}
+
+.btn-apply:hover {
+    background-color: var(--secondary-color, #388e3c);
+}
+
+/* Responsive: Wrap filter controls vertically on smaller screens */
+@media (max-width: 768px) {
+    .filter-controls {
+        flex-wrap: wrap;
+        overflow-x: visible;
+    }
+    .filter-group {
+        flex: 1 1 100%;
+        min-width: 100%;
+    }
+    .btn-apply {
+        width: 100%;
+        margin-top: 15px;
+        flex-shrink: 1;
+    }
+}
+.picked-up {
+    opacity: 0.6;
+    pointer-events: none; /* disables hover/click on the whole card if you want */
+}
+
+.picked-up-badge {
+    background-color: #e74c3c;
+    color: white;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 5px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 0.8rem;
+    z-index: 10;
+}
+
+.btn-request.disabled {
+    background-color: #ccc !important;
+    cursor: not-allowed;
+    color: #666 !important;
+}

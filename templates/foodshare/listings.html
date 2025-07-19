@@ -1,0 +1,215 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Browse Food Listings | Bhokey</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+   <header>
+        <div class="container">
+            <div class="logo">
+                <h1><i class="fas fa-utensils"></i> Bhokey</h1>
+                <p>Connecting excess food with those who need it</p>
+            </div>
+            <nav>
+               <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'listings' %}">Browse Listings</a></li>
+
+        {% if user.is_authenticated %}
+            <li><a href="{% url 'post_food' %}">Post Food</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        {% else %}
+            <li><a href="{% url 'login' %}" class="btn-login">Login/Signup</a></li>
+        {% endif %}
+        
+        <li><a href="#">About</a></li>
+    </ul>
+            </nav>
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <main class="listings-page">
+        <div class="container">
+            <div class="page-header">
+                <h1>Available Food Listings</h1>
+    
+               <form id="filter-form" method="get">
+                 <div class="filter-controls">
+    <div class="filter-group">
+        <label for="category-filter">Category:</label>
+        <select id="category-filter" name="category">
+            <option value="">All Categories</option>
+            <option value="fruits">Fruits & Vegetables</option>
+            <option value="grains">Grains & Bread</option>
+            <option value="dairy">Dairy & Eggs</option>
+            <option value="meat">Meat & Poultry</option>
+            <option value="prepared">Prepared Meals</option>
+            <option value="packaged">Packaged Goods</option>
+        </select>
+    </div>
+    <div class="filter-group">
+        <label for="dietary-filter">Dietary:</label>
+        <select id="dietary-filter" name="dietary">
+            <option value="">Any</option>
+            <option value="vegetarian">Vegetarian</option>
+            <option value="vegan">Vegan</option>
+            <option value="gluten-free">Gluten-Free</option>
+            <option value="halal">Halal</option>
+        </select>
+    </div>
+    <div class="filter-group">
+        <label for="distance-filter">Distance:</label>
+        <select id="distance-filter" name="distance">
+            <option value="">Any distance</option>
+            <option value="5">Within 5 km</option>
+            <option value="10">Within 10 km</option>
+            <option value="25">Within 25 km</option>
+            <option value="50">Within 50 km</option>
+        </select>
+    </div>
+
+    <input type="hidden" id="latitude" name="latitude">
+    <input type="hidden" id="longitude" name="longitude">
+
+    <button type="submit" class="btn btn-apply">Apply Filters</button>
+</form>
+</div>
+
+            <div class="listings-container">
+                <div class="listings-grid">
+                    {% for post in posts %}
+                        {% if post.image1 %}
+                            <div class="listing-card">
+                                <div class="listing-image" style="background-image: url('{{ post.image1.url }}');">
+                                    <span class="category-tag">{{ post.category|title }}</span>
+                                </div>
+                                <div class="listing-details">
+                                    <h3>{{ post.name }}</h3>
+                                    <p><i class="fas fa-map-marker-alt"></i> {{ post.location }}</p>
+                                    <div class="food-tags">
+                                        <span>{{ post.quantity }}</span>
+                                        <span>{{ post.dietary }}</span>
+                                    </div>
+                                    <div class="listing-actions">
+                                       <a href="{% url 'pickup_view' post.pk %}" class="btn btn-request">Request</a>
+                                        <button class="btn btn-outline">Details</button>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="listing-card">
+                                <div class="listing-image" style="background-image: url('{% static "images/default-food.jpg" %}');">
+                                    <span class="category-tag">{{ post.category|title }}</span>
+                                </div>
+                                <div class="listing-details">
+                                    <h3>{{ post.name }}</h3>
+                                    <p><i class="fas fa-map-marker-alt"></i> {{ post.location }}</p>
+                                    <div class="food-tags">
+                                        <span>{{ post.quantity }}</span>
+                                        <span>{{ post.dietary }}</span>
+                                    </div>
+                                   <div class="listing-actions">
+    {% if post.pk %}
+      {% if not post.picked_up %}
+        <a href="{% url 'pickup_view' post.pk %}" class="btn-request">Request</a>
+      {% else %}
+        <button class="btn-request disabled" disabled>Already Picked Up</button>
+      {% endif %}
+    {% else %}
+      <span class="btn-request disabled" title="Invalid post">Request</span>
+    {% endif %}
+    <button class="btn btn-outline">Details</button>
+</div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% empty %}
+                        <p>No food listings available at the moment.</p>
+                    {% endfor %}
+                </div>
+                <div class="listing-card {% if post.picked_up %}picked-up{% endif %}">
+    <div class="listing-image" style="background-image: url('{% if post.image1 %}{{ post.image1.url }}{% else %}{% static "images/default-food.jpg" %}{% endif %}');">
+        <span class="category-tag">{{ post.category|title }}</span>
+        {% if post.picked_up %}
+            <span class="picked-up-badge">Picked Up</span>
+        {% endif %}
+    </div>
+    <div class="listing-details">
+        <h3>{{ post.name }}</h3>
+        <p><i class="fas fa-map-marker-alt"></i> {{ post.location }}</p>
+        <div class="food-tags">
+            <span>{{ post.quantity }}</span>
+            <span>{{ post.dietary }}</span>
+        </div>
+        <div class="listing-actions">
+    {% if post.pk %}
+      {% if not post.picked_up %}
+        <a href="{% url 'create_pickup_request' post.pk %}" class="btn btn-request">Request</a>
+      {% else %}
+        <button class="btn-request disabled" disabled>Already Picked Up</button>
+      {% endif %}
+    {% else %}
+      <span class="btn-request disabled" title="Invalid post">Request</span>
+    {% endif %}
+    <button class="btn btn-outline">Details</button>
+</div>
+    </div>
+</div>
+
+                <div class="pagination">
+                    <button class="btn-prev"><i class="fas fa-chevron-left"></i> Previous</button>
+                    <div class="page-numbers">
+                        <span class="active">1</span>
+                        <span>2</span>
+                        <span>3</span>
+                        <span>...</span>
+                        <span>10</span>
+                    </div>
+                    <button class="btn-next">Next <i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Bhokey</h3>
+                    <p>Connecting communities to reduce food waste and hunger.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Food Safety</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Bhokey All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
