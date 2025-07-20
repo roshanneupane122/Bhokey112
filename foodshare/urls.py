@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-
+from .views import debug_foodposts
 from django.conf.urls.static import static
 
 urlpatterns = [
