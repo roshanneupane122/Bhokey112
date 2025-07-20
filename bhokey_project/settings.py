@@ -125,7 +125,8 @@ CLOUDINARY_STORAGE = {
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-
+print("DEBUG is:", DEBUG)
+print("Cloud name is:", os.getenv('CLOUDINARY_CLOUD_NAME'))
 # Media files
 # MEDIA_URL = '/media/'
 # MEDIA_ROOT = BASE_DIR / 'media'
