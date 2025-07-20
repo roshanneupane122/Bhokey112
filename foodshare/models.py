@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
-
+from cloudinary.models import CloudinaryField
 class FoodPost(models.Model):
     user = models.ForeignKey(
         User, 
@@ -13,7 +13,7 @@ class FoodPost(models.Model):
     quantity = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     dietary = models.CharField(max_length=200, blank=True)
-    image1 = models.ImageField( null=True, blank=True)
+    image1 = CloudinaryField('image')
     location = models.CharField(max_length=200)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
@@ -24,3 +24,6 @@ class FoodPost(models.Model):
     def __str__(self):
         return self.name
 
+
+
+   
