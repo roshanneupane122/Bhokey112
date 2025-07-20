@@ -122,5 +122,19 @@ def delete_post(request, pk):
         return redirect('post_food')
     return render(request, 'foodshare/confirm_delete.html', {'post': post})
 
+from django.http import JsonResponse
+from foodshare.models import FoodPost
+
+@login_required
+def debug_foodposts(request):
+    posts = FoodPost.objects.all().order_by('-id')[:10]
+    data = []
+    for p in posts:
+        data.append({
+            'id': p.id,
+            'name': p.name,
+            'image_url': p.image1.url if p.image1 else 'No Image',
+        })
+    return JsonResponse(data, safe=False)
 
 
