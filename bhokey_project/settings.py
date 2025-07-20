@@ -116,7 +116,7 @@ if not DEBUG:
 
 
 # Media files (User uploads)
-MEDIA_URL = '/media/'
+MEDIA_URL = 'https://bhokey-media.onrender.com/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
