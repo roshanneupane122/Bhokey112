@@ -1,7 +1,11 @@
 // Mobile menu toggle
-document.querySelector('.mobile-menu').addEventListener('click', function() {
-    document.querySelector('nav').classList.toggle('show');
-});
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+
+  hamburger.addEventListener('click', () => {
+    console.log("hello");
+    navLinks.classList.toggle('active');
+  });
 
 // Image upload preview for post form
 document.addEventListener('DOMContentLoaded', function() {
