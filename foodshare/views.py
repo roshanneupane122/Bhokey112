@@ -72,31 +72,63 @@ def pickup_view(request, pk):
 
 @never_cache
 @login_required
+# def post_food(request):
+#     user = request.user
+    
+#     if request.method == 'POST':
+#         form = FoodPostForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             food_post = form.save(commit=False)
+#             food_post.user = user
+
+#             # Get latitude and longitude from POST
+#             lat = request.POST.get('latitude')
+#             lng = request.POST.get('longitude')
+
+#             # Convert empty strings to None, else convert to float
+#             food_post.latitude = float(lat) if lat else None
+#             food_post.longitude = float(lng) if lng else None
+
+#             food_post.save()
+#             return redirect('listings')
+#     else:
+#         form = FoodPostForm()
+
+#     user_posts = FoodPost.objects.filter(user=user).order_by('-id')
+#     return render(request, 'foodshare/post.html', {'form': form, 'user_posts': user_posts})
+
+import logging
+logger = logging.getLogger(__name__)
+
+@never_cache
+@login_required
 def post_food(request):
     user = request.user
-    
     if request.method == 'POST':
         form = FoodPostForm(request.POST, request.FILES)
         if form.is_valid():
             food_post = form.save(commit=False)
             food_post.user = user
 
-            # Get latitude and longitude from POST
             lat = request.POST.get('latitude')
             lng = request.POST.get('longitude')
-
-            # Convert empty strings to None, else convert to float
             food_post.latitude = float(lat) if lat else None
             food_post.longitude = float(lng) if lng else None
 
-            food_post.save()
+            try:
+                food_post.save()
+                logger.info(f"Saved food post for user {user} with image URL: {food_post.image1.url}")
+            except Exception as e:
+                logger.error(f"Error saving food post: {e}")
+
             return redirect('listings')
+        else:
+            logger.error(f"Form invalid errors: {form.errors}")
     else:
         form = FoodPostForm()
 
     user_posts = FoodPost.objects.filter(user=user).order_by('-id')
     return render(request, 'foodshare/post.html', {'form': form, 'user_posts': user_posts})
-
 
 
 
