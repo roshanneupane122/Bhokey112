@@ -13,6 +13,12 @@ def index(request):
     recent_posts = FoodPost.objects.all().order_by('-id')[:3]  # latest 3 posts
     return render(request, 'foodshare/index.html', {'recent_posts': recent_posts})
 
+from django.http import JsonResponse
+from .models import FoodPost
+
+def debug_foodposts(request):
+    data = list(FoodPost.objects.values())
+    return JsonResponse(data, safe=False)
 
 
 from math import radians, cos, sin, asin, sqrt
