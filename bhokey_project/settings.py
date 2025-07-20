@@ -124,13 +124,17 @@ USE_TZ = True
 
 import os
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # 👈 Always set this
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # For development
+]
 
 if not DEBUG:
-    # Tell Django to copy static assets into a path called `staticfiles` (specific to Render)
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
 
 
 MEDIA_URL = '/media/'
