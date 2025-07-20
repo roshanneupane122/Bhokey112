@@ -7,7 +7,8 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.utils import timezone
 from django.contrib import messages
-
+import logging
+logger = logging.getLogger(__name__)
 def index(request):
     recent_posts = FoodPost.objects.all().order_by('-id')[:3]  # latest 3 posts
     return render(request, 'foodshare/index.html', {'recent_posts': recent_posts})
@@ -97,8 +98,7 @@ def pickup_view(request, pk):
 #     user_posts = FoodPost.objects.filter(user=user).order_by('-id')
 #     return render(request, 'foodshare/post.html', {'form': form, 'user_posts': user_posts})
 
-import logging
-logger = logging.getLogger(__name__)
+
 
 @never_cache
 @login_required
