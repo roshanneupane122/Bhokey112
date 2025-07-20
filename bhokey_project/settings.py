@@ -16,17 +16,13 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-u-w$t_nf+8p__c+v7mo9h8@hzekzyzjj(s@czv2xup*n0!!o^)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False  # Set False for production
 
-
-ALLOWED_HOSTS = ['*']
-DEBUG = True
+ALLOWED_HOSTS = ['*']  # Change this to your domain(s) in production
 
 
 # Application definition
@@ -44,6 +40,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # WhiteNoise here for static files
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -51,8 +48,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'accounts.middleware.prevent_back_middleware.PreventBackMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-    
 ]
 
 ROOT_URLCONF = 'bhokey_project.urls'
@@ -80,7 +75,7 @@ WSGI_APPLICATION = 'bhokey_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3',  # Change to your DB engine if needed
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
@@ -90,18 +85,10 @@ DATABASES = {
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
 
 
@@ -120,32 +107,21 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-
-
-import os
-from pathlib import Path
-import os
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # 👈 Always set this
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # For development
-]
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # Folder where collectstatic puts files
+STATICFILES_DIRS = [BASE_DIR / 'static']  # Your dev static folder
 
 if not DEBUG:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
+# Media files (User uploads)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
+
+# Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Login URL
 LOGIN_URL = '/accounts/login/'
