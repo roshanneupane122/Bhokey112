@@ -446,13 +446,29 @@ footer {
 }
 
 @media (max-width: 768px) {
-    nav {
-        display: none;
-    }
-    
     .mobile-menu {
         display: block;
     }
+    nav {
+        display: block;
+    }
+    
+    nav ul {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 80px;
+    right: 20px;
+    background: white;
+    padding: 1rem;
+    width: 200px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+  }
+
+  nav ul.active {
+    display: flex;
+  }
     
     .hero h2 {
         font-size: 2rem;
@@ -467,6 +483,7 @@ footer {
         gap: 30px;
     }
 }
+
 
 @media (max-width: 576px) {
     .logo h1 {
