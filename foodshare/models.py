@@ -13,7 +13,7 @@ class FoodPost(models.Model):
     quantity = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     dietary = models.CharField(max_length=200, blank=True)
-    image1 = CloudinaryField('image')
+    image1 = CloudinaryField('image' ,null=True, blank=True)
     location = models.CharField(max_length=200)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
