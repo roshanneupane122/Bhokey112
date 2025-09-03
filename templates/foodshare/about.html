@@ -1,0 +1,211 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SharePlate - Reduce Food Waste</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <style> 
+/* about.css - advanced and modern styling */
+.about-container {
+    padding: 80px 20px;
+    background: linear-gradient(to right, #f8f8f8ff, #ffffffff);
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+}
+
+.intro {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto 60px auto;
+}
+
+.intro h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    color: #111;
+}
+
+.intro h1 .highlight {
+    color: #4CAF50;
+}
+
+.intro .about-text {
+    font-size: 1.3rem;
+    line-height: 1.8;
+    color: #555;
+    max-width: 800px;
+    margin: 0 auto;
+    font-weight: 500;
+}
+
+.team {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+}
+
+.member {
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 25px;
+    width: 220px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    transition: transform 0.4s, box-shadow 0.4s;
+    text-align: center;
+}
+
+.member:hover {
+    transform: translateY(-15px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+.member img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+   
+    margin-bottom: 15px;
+    transition: transform 0.4s;
+}
+
+.member img:hover {
+    transform: rotate(5deg) scale(1.1);
+}
+
+.member h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 10px 0 5px;
+    color: #222;
+}
+
+.member p {
+    font-size: 1rem;
+    color: #777;
+    font-weight: 500;
+}
+
+
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+<header>
+        <div class="container">
+            <div class="logo">
+                <h1><i class="fas fa-utensils"></i> Bhokey</h1>
+                <p>Connecting excess food with those who need it</p>
+            </div>
+          
+
+            <nav>
+               <ul id="navLinks">
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'listings' %}">Browse Listings</a></li>
+         <li><a href="{% url 'about' %}">About</a></li>
+
+        {% if user.is_authenticated %}
+            <li><a href="{% url 'post_food' %}">Post Food</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        {% else %}
+            <li><a href="{% url 'login' %}" class="btn-login">Login/Signup</a></li>
+        {% endif %}
+        
+       {% comment %} <li><a href="{% url 'about' %}">About</a></li> {% endcomment %}
+    </ul>
+    
+            </nav>
+             <div class="mobile-menu" id="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+  <!-- about.html -->
+<div class="about-container">
+  <div class="intro">
+    <h1>Meet <span class="highlight">Our Team</span></h1>
+    <p class="about-text">
+      We are a passionate team committed to saving food and building a sustainable future. 
+      Every day, we work to connect surplus food with people who need it the most, 
+      reducing waste and making a difference in our community. Together, we are turning ideas 
+      into action and ensuring that nothing goes to waste.
+    </p>
+  </div>
+
+  <div class="team">
+    <div class="member">
+      <img src="{% static 'images/member1.jpg' %}" alt="Member 1">
+      <h3>Roshan Nyaupane</h3>
+      <p>Frontend Developer</p>
+    </div>
+    <div class="member">
+      <img src="{% static 'images/member2.jpg' %}" alt="Member 2">
+      <h3>Sita Sharma</h3>
+      <p>Backend Developer</p>
+    </div>
+    <div class="member">
+      <img src="{% static 'images/member3.jpg' %}" alt="Member 3">
+      <h3>Ram Thapa</h3>
+      <p>UI/UX Designer</p>
+    </div>
+    <div class="member">
+      <img src="{% static 'images/member4.jpg' %}" alt="Member 4">
+      <h3>Gita KC</h3>
+      <p>Project Manager</p>
+    </div>
+    <div class="member">
+      <img src="{% static 'images/member5.jpg' %}" alt="Member 5">
+      <h3>Hari Bhandari</h3>
+      <p>QA Engineer</p>
+    </div>
+  </div>
+</div>
+
+
+
+
+  <!-- Footer -->
+  <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3> Bhokey</h3>
+                    <p>Connecting communities to reduce food waste and hunger.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Food Safety</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Bhokey. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
