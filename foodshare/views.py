@@ -12,6 +12,8 @@ def index(request):
     recent_posts = FoodPost.objects.all().order_by('-id')[:3]  # latest 3 posts
     return render(request, 'foodshare/index.html', {'recent_posts': recent_posts})
 
+def about(request):
+    return render(request,'foodshare/about.html')
 
 
 from math import radians, cos, sin, asin, sqrt
