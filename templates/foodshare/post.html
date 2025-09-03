@@ -29,13 +29,14 @@
             <ul id="navLinks">
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="{% url 'listings' %}">Browse Listings</a></li>
+                  <li><a href="#">About</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'post_food' %}">Post Food</a></li>
                     <li><a href="{% url 'logout' %}">Logout</a></li>
                 {% else %}
                     <li><a href="{% url 'login' %}" class="btn-login">Login/Signup</a></li>
                 {% endif %}
-                <li><a href="#">About</a></li>
+              
             </ul>
         </nav>
         <div class="mobile-menu"id="hamburger">
