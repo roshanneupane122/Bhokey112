@@ -74,7 +74,6 @@ Deployed:https://bholey.onrender.com/
 
  Implement push notifications for new food nearby
 
- Mobile app version (React Native / Flutter)
 
 🤝 Contributing
 
